@@ -33,7 +33,7 @@ u¿ytkownika.
 Summary:	Header files and development documentation for DLM
 Summary(pl):	Pliki nag³ówkowe i dokumentacja programisty dla DLM-a
 Group:		Development/Libraries
-Requires:	%{name} = %{epoch}:%{version}-%{release}
+Requires:	%{name} = %{version}-%{release}
 
 %description devel
 Header files and development documentation for DLM.
@@ -45,7 +45,7 @@ Pliki nag³ówkowe i dokumentacja programisty dla DLM-a.
 Summary:	Static DLM library
 Summary(pl):	Statyczna biblioteka DLM
 Group:		Development/Libraries
-Requires:	%{name}-devel = %{epoch}:%{version}-%{release}
+Requires:	%{name}-devel = %{version}-%{release}
 
 %description static
 Static DLM library.
