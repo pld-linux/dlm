@@ -1,6 +1,5 @@
-#
-# Conditional build:
-Summary:	general-purpose distributed lock manager
+Summary:	General-purpose distributed lock manager
+Summary(pl):	Zarz±dca rozproszonych blokad ogólnego przeznaczenia
 Name:		dlm
 %define	snap	20040625
 Version:	0.0.0.%{snap}.1
@@ -18,21 +17,35 @@ The DLM lock manager is a kernel-based VMS-like distributed lock
 manager. It is general purpose and not specific to only GFS or CLVM.
 Kernel and userspace locking API's are available.
 
+%description -l pl
+Zarz±dca blokad DLM to oparty na j±drze zarz±dca rozproszonych blokad
+w stylu VMS. Jest ogólnego przeznaczenia, przeznaczonym nie tylko dla
+GFS-a czy CLVM-a. Dostêpne s± API blokowania w j±drze i przestrzeni
+u¿ytkownika.
+
 %package devel
-Summary:	Header files and development documentation for %{name}
+Summary:	Header files and development documentation for DLM
+Summary(pl):	Pliki nag³ówkowe i dokumentacja programisty dla DLM-a
 Group:		Development/Libraries
 Requires:	%{name} = %{epoch}:%{version}-%{release}
 
 %description devel
-Header files and development documentation for %{name}.
+Header files and development documentation for DLM.
+
+%description devel -l pl
+Pliki nag³ówkowe i dokumentacja programisty dla DLM-a.
 
 %package static
-Summary:	Static %{name} library
+Summary:	Static DLM library
+Summary(pl):	Statyczna biblioteka DLM
 Group:		Development/Libraries
 Requires:	%{name}-devel = %{epoch}:%{version}-%{release}
 
 %description static
-Static %{name} library.
+Static DLM library.
+
+%description static -l pl
+Statyczna biblioteka DLM.
 
 %prep
 %setup -q -n %{name}
@@ -68,8 +81,8 @@ rm -rf $RPM_BUILD_ROOT
 %files devel
 %defattr(644,root,root,755)
 %doc doc/*.txt
-%{_includedir}/*.h
 %attr(755,root,root) %{_libdir}/*.so
+%{_includedir}/*.h
 
 %files static
 %defattr(644,root,root,755)
