@@ -9,7 +9,7 @@ Group:		Libraries
 Source0:	%{name}.tar.gz
 # Source0-md5:	2aad29664265c6d2b4ab43276d4a45fd
 Patch0:		%{name}-DESTDIR.patch
-URL:		http://sources.redhat.com/cluster/
+URL:		http://sources.redhat.com/cluster/dlm/
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
