@@ -8,8 +8,14 @@ License:	GPL
 Group:		Libraries
 Source0:	%{name}.tar.gz
 # Source0-md5:	2aad29664265c6d2b4ab43276d4a45fd
+# from dlm-kernel CVS
+Source1:	dlm.h
+# NoSource1-md5: 61dc32014f2dd75fc5472bf049d9bf3a (rev 1.2)
+Source2:	dlm_device.h
+# NoSource2-md5: 1848456a6fe6a45c351ca317e2b8a815 (rev 1.1)
 Patch0:		%{name}-DESTDIR.patch
 URL:		http://sources.redhat.com/cluster/dlm/
+BuildRequires:	perl-base
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
@@ -51,22 +57,31 @@ Statyczna biblioteka DLM.
 %setup -q -n %{name}
 %patch0 -p1
 
+install -d include/cluster
+cp -f %{SOURCE1} %{SOURCE2} include/cluster
+
+%{__perl} -pi -e 's/-g -O/%{rpmcflags}/' lib/Makefile
+
 %build
 ./configure \
 	--incdir=%{_includedir} \
-	--kernel_src=%{_kernelsrcdir} \
 	--libdir=%{_libdir} \
 	--mandir=%{_mandir} \
 	--prefix=%{_prefix} \
 	--sbindir=%{_sbindir}
+
 %{__make} \
-	CC="%{__cc}"
+	CC="%{__cc}" \
+	incdir=`pwd`/include
 
 %install
 rm -rf $RPM_BUILD_ROOT
 
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT
+
+install -d $RPM_BUILD_ROOT%{_includedir}/cluster
+install include/cluster/*.h $RPM_BUILD_ROOT%{_includedir}/cluster
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -76,13 +91,14 @@ rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(644,root,root,755)
-%attr(755,root,root) %{_libdir}/*.so.*
+%attr(755,root,root) %{_libdir}/*.so.*.*
 
 %files devel
 %defattr(644,root,root,755)
 %doc doc/*.txt
 %attr(755,root,root) %{_libdir}/*.so
 %{_includedir}/*.h
+%{_includedir}/cluster
 
 %files static
 %defattr(644,root,root,755)
