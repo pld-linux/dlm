@@ -1,0 +1,14 @@
+diff -urN dlm.org/lib/Makefile dlm/lib/Makefile
+--- dlm.org/lib/Makefile	2004-06-25 12:40:01.615519264 +0200
++++ dlm/lib/Makefile	2004-06-25 12:40:15.421420448 +0200
+@@ -56,8 +56,8 @@
+ 	install -d ${libdir}
+ 	install $(LIBNAME).a ${libdir}
+ 	install $(LIBNAME).so.$(RELEASE_MAJOR).$(RELEASE_MINOR) ${libdir}
+-	ln -sf ${libdir}/$(LIBNAME).so.$(RELEASE_MAJOR).$(RELEASE_MINOR) ${libdir}/$(LIBNAME).so
+-	ln -sf ${libdir}/$(LIBNAME).so.$(RELEASE_MAJOR).$(RELEASE_MINOR) ${libdir}/$(LIBNAME).so.$(RELEASE_MAJOR)
++	ln -sf $(LIBNAME).so.$(RELEASE_MAJOR).$(RELEASE_MINOR) ${libdir}/$(LIBNAME).so
++	ln -sf $(LIBNAME).so.$(RELEASE_MAJOR).$(RELEASE_MINOR) ${libdir}/$(LIBNAME).so.$(RELEASE_MAJOR)
+ 
+ uninstall:
+ 	${UNINSTALL} libdlm.h ${incdir}
