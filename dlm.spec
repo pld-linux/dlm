@@ -1,19 +1,18 @@
 Summary:	General-purpose distributed lock manager
 Summary(pl):	Zarz±dca rozproszonych blokad ogólnego przeznaczenia
 Name:		dlm
-%define	snap	20040625
-Version:	0.0.0.%{snap}.1
-Release:	1
+%define	_pre	pre21
+Version:	1.0
+Release:	0.%{_pre}.1
 License:	GPL
 Group:		Libraries
-Source0:	%{name}.tar.gz
-# Source0-md5:	2aad29664265c6d2b4ab43276d4a45fd
+Source0:	http://people.redhat.com/cfeist/cluster/tgz/%{name}-%{version}-%{_pre}.tar.gz
+# Source0-md5:	37d5b471549af746ff93af7cac3b5a55
 # from dlm-kernel CVS
-Source1:	dlm.h
+Source1:	%{name}.h
 # NoSource1-md5: 61dc32014f2dd75fc5472bf049d9bf3a (rev 1.2)
-Source2:	dlm_device.h
+Source2:	%{name}_device.h
 # NoSource2-md5: 1848456a6fe6a45c351ca317e2b8a815 (rev 1.1)
-Patch0:		%{name}-DESTDIR.patch
 URL:		http://sources.redhat.com/cluster/dlm/
 BuildRequires:	perl-base
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
@@ -54,8 +53,7 @@ Static DLM library.
 Statyczna biblioteka DLM.
 
 %prep
-%setup -q -n %{name}
-%patch0 -p1
+%setup -q -n %{name}-%{version}-%{_pre}
 
 install -d include/cluster
 cp -f %{SOURCE1} %{SOURCE2} include/cluster
