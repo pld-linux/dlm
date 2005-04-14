@@ -4,7 +4,7 @@ Name:		dlm
 %define	_pre	pre21
 Version:	1.0
 Release:	0.%{_pre}.1
-License:	GPL
+License:	LGPL v2+
 Group:		Libraries
 Source0:	http://people.redhat.com/cfeist/cluster/tgz/%{name}-%{version}-%{_pre}.tar.gz
 # Source0-md5:	37d5b471549af746ff93af7cac3b5a55
@@ -89,15 +89,15 @@ rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(644,root,root,755)
-%attr(755,root,root) %{_libdir}/*.so.*.*
+%attr(755,root,root) %{_libdir}/libdlm*.so.*.*
 
 %files devel
 %defattr(644,root,root,755)
 %doc doc/*.txt
-%attr(755,root,root) %{_libdir}/*.so
-%{_includedir}/*.h
+%attr(755,root,root) %{_libdir}/libdlm*.so
+%{_includedir}/libdlm.h
 %{_includedir}/cluster
 
 %files static
 %defattr(644,root,root,755)
-%{_libdir}/*.a
+%{_libdir}/libdlm*.a
