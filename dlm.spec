@@ -10,9 +10,9 @@ Source0:	http://people.redhat.com/cfeist/cluster/tgz/%{name}-%{version}-%{_pre}.
 # Source0-md5:	37d5b471549af746ff93af7cac3b5a55
 # from dlm-kernel CVS
 Source1:	%{name}.h
-# NoSource1-md5: 61dc32014f2dd75fc5472bf049d9bf3a (rev 1.2)
+# NoSource1-md5: 3a0b53233a22384762742d9b3b277969 (rev 1.12)
 Source2:	%{name}_device.h
-# NoSource2-md5: 1848456a6fe6a45c351ca317e2b8a815 (rev 1.1)
+# NoSource2-md5: f2c1ed74c31b43b13581c48b1834e3c2 (rev 1.4)
 URL:		http://sources.redhat.com/cluster/dlm/
 BuildRequires:	perl-base
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
