@@ -48,7 +48,6 @@
  * DLM_LSF_NOTIMERS
  *
  * Do not subject locks in this lockspace to time-outs.
- *
  */
 
 #define DLM_LSF_NOTIMERS       (1)
@@ -78,11 +77,8 @@
  *
  * DLM_LKF_QUECVT
  *
- * Force a conversion lock request to the back of the convert queue.  All other
- * conversion requests ahead of it must be granted before it can be granted.
- * This enforces a FIFO ordering on the convert queue.  When this flag is set,
- * indefinite postponement is averted.  This flag is allowed only when
- * converting a lock to a more restrictive mode.
+ * Force a conversion request to be queued, even if it is compatible with
+ * the granted modes of other locks on the same resource.
  *
  * DLM_LKF_CANCEL
  *
@@ -114,8 +110,8 @@
  *
  * DLM_LKF_EXPEDITE
  *
- * If this lock conversion cannot be granted immediately it is to go to the
- * head of the conversion queue regardless of its requested lock mode.
+ * Used only with new requests for NL mode locks.  Tells the lock manager
+ * to grant the lock, ignoring other locks in convert and wait queues.
  *
  * DLM_LKF_NOQUEUEBAST
  *
@@ -123,6 +119,14 @@
  * used along with the NOQUEUE flag.  Blocking AST's are not sent for failed
  * NOQUEUE requests otherwise.
  *
+ * DLM_LKF_HEADQUE
+ *
+ * Add a lock to the head of the convert or wait queue rather than the tail.
+ *
+ * DLM_LKF_NOORDER
+ *
+ * Disregard the standard grant order rules and grant a lock as soon as it
+ * is compatible with other granted locks.
  */
 
 #define DLM_LKF_NOQUEUE        (0x00000001)
@@ -137,9 +141,14 @@
 #define DLM_LKF_NODLCKBLK      (0x00000200)
 #define DLM_LKF_EXPEDITE       (0x00000400)
 #define DLM_LKF_NOQUEUEBAST    (0x00000800)
+#define DLM_LKF_HEADQUE        (0x00001000)
+#define DLM_LKF_NOORDER        (0x00002000)
+#define DLM_LKF_ORPHAN         (0x00004000)
+#define DLM_LKF_ALTPR          (0x00008000)
+#define DLM_LKF_ALTCW          (0x00010000)
 
 /*
- * Some return codes that are not not in errno.h
+ * Some return codes that are not in errno.h
  */
 
 #define DLM_ECANCEL            (0x10001)
@@ -172,6 +181,7 @@ struct dlm_range {
  *
  * sb_flags: DLM_SBF_DEMOTED is returned if in the process of promoting a lock,
  * it was first demoted to NL to avoid conversion deadlock.
+ * DLM_SBF_VALNOTVALID is returned if the resource's LVB is marked invalid.
  *
  * sb_status: the returned status of the lock request set prior to AST
  * execution.  Possible return values:
@@ -181,10 +191,12 @@ struct dlm_range {
  * -ENOMEM if there is no memory to process request
  * -EINVAL if there are invalid parameters
  * -DLM_EUNLOCK if unlock request was successful
- * -DLM_ECANCEL ?
+ * -DLM_ECANCEL if a cancel completed successfully
  */
 
 #define DLM_SBF_DEMOTED        (0x01)
+#define DLM_SBF_VALNOTVALID    (0x02)
+#define DLM_SBF_ALTMODE        (0x04)
 
 struct dlm_lksb {
 	int 	 sb_status;
@@ -194,8 +206,7 @@ struct dlm_lksb {
 };
 
 /*
- * These defines are the bits that make up the
- * query code.
+ * These defines are the bits that make up the query code.
  */
 
 /* Bits 0, 1, 2, the lock mode or DLM_LOCK_THIS, see DLM_LOCK_NL etc in
@@ -222,6 +233,7 @@ struct dlm_lksb {
 #define DLM_QUERY_LOCKS_BLOCKING 0x0400
 #define DLM_QUERY_LOCKS_NOTBLOCK 0x0500
 #define DLM_QUERY_LOCKS_ALL      0x0600
+#define DLM_QUERY_LOCKS_ORPHAN   0x0700
 #define DLM_QUERY_MASK           0x0F00
 
 /* GRMODE is the default for mode comparisons,
@@ -236,6 +248,7 @@ struct dlm_lockinfo {
         int lki_mstlkid;        /* Lock ID on master node */
 	int lki_parent;
 	int lki_node;		/* Originating node (not master) */
+	int lki_ownpid;		/* Owner pid on originating node */
 	uint8_t lki_state;	/* Queue the lock is on */
 	uint8_t lki_grmode;	/* Granted mode */
 	uint8_t lki_rqmode;	/* Requested mode */
@@ -245,9 +258,9 @@ struct dlm_lockinfo {
 
 struct dlm_resinfo {
 	int rsi_length;
-	int rsi_grantcount;	/* No. of nodes on grant queue */
-	int rsi_convcount;	/* No. of nodes on convert queue */
-	int rsi_waitcount;	/* No. of nodes on wait queue */
+	int rsi_grantcount;	/* No. of locks on grant queue */
+	int rsi_convcount;	/* No. of locks on convert queue */
+	int rsi_waitcount;	/* No. of locks on wait queue */
 	int rsi_masternode;	/* Master for this resource */
 	char rsi_name[DLM_RESNAME_MAXLEN];	/* Resource name */
 	char rsi_valblk[DLM_LVB_LEN];	/* Master's LVB contents, if applicable
@@ -361,7 +374,7 @@ int dlm_lock(dlm_lockspace_t *lockspace,
  * lkid: the lock ID as returned in the lksb
  * flags: input flags (DLM_LKF_)
  * lksb: if NULL the lksb parameter passed to last lock request is used
- * astarg: if NULL, astarg in last lock request is used
+ * astarg: the arg used with the completion ast for the unlock
  *
  * Returns:
  * 0 if request is successfully queued for processing
@@ -371,11 +384,11 @@ int dlm_lock(dlm_lockspace_t *lockspace,
  * -ENOTCONN if there is a communication error
  */
 
-extern int dlm_unlock(dlm_lockspace_t *lockspace,
-		       uint32_t lkid,
-		       uint32_t flags,
-		       struct dlm_lksb *lksb,
-		       void *astarg);
+int dlm_unlock(dlm_lockspace_t *lockspace,
+	       uint32_t lkid,
+	       uint32_t flags,
+	       struct dlm_lksb *lksb,
+	       void *astarg);
 
 /* Query interface
  *
@@ -392,15 +405,16 @@ extern int dlm_unlock(dlm_lockspace_t *lockspace,
  *              to put the qinfo pointer into lksb->sb_lvbptr
  *              and pass the lksb in here.
  */
-extern int dlm_query(dlm_lockspace_t *lockspace,
-		      struct dlm_lksb *lksb,
-		      int query,
-		      struct dlm_queryinfo *qinfo,
-		      void (ast_routine(void *)),
-		      void *astarg);
+int dlm_query(dlm_lockspace_t *lockspace,
+	      struct dlm_lksb *lksb,
+	      int query,
+	      struct dlm_queryinfo *qinfo,
+	      void (ast_routine(void *)),
+	      void *astarg);
 
 
 void dlm_debug_dump(void);
+void dlm_locks_dump(void);
 
 #endif				/* __KERNEL__ */
 
