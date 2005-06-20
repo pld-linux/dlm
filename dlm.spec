@@ -3,7 +3,7 @@ Summary(pl):	Zarz±dca rozproszonych blokad ogólnego przeznaczenia
 Name:		dlm
 %define	_pre	pre21
 Version:	1.0
-Release:	0.%{_pre}.1
+Release:	0.%{_pre}.2
 License:	LGPL v2+
 Group:		Libraries
 Source0:	http://people.redhat.com/cfeist/cluster/tgz/%{name}-%{version}-%{_pre}.tar.gz
@@ -74,12 +74,21 @@ cp -f %{SOURCE1} %{SOURCE2} include/cluster
 
 %install
 rm -rf $RPM_BUILD_ROOT
+install -d $RPM_BUILD_ROOT/%{_lib}
 
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT
 
 install -d $RPM_BUILD_ROOT%{_includedir}/cluster
 install include/cluster/*.h $RPM_BUILD_ROOT%{_includedir}/cluster
+
+mv $RPM_BUILD_ROOT%{_libdir}/libdlm.so.*.* $RPM_BUILD_ROOT/%{_lib}/
+ln -sf /%{_lib}/$(cd $RPM_BUILD_ROOT/%{_lib} ; echo libdlm.so.*.*) \
+        $RPM_BUILD_ROOT%{_libdir}/libdlm.so
+
+mv $RPM_BUILD_ROOT%{_libdir}/libdlm_lt.so.*.* $RPM_BUILD_ROOT/%{_lib}/
+ln -sf /%{_lib}/$(cd $RPM_BUILD_ROOT/%{_lib} ; echo libdlm_lt.so.*.*) \
+        $RPM_BUILD_ROOT%{_libdir}/libdlm_lt.so
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -89,15 +98,15 @@ rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(644,root,root,755)
-%attr(755,root,root) %{_libdir}/libdlm*.so.*.*
+%attr(755,root,root) /%{_lib}/libdlm*.so.*.*
 
 %files devel
 %defattr(644,root,root,755)
 %doc doc/*.txt
-%attr(755,root,root) %{_libdir}/libdlm*.so
+%attr(755,root,root) %{_libdir}/libdlm.so
 %{_includedir}/libdlm.h
 %{_includedir}/cluster
 
 %files static
 %defattr(644,root,root,755)
-%{_libdir}/libdlm*.a
+%{_libdir}/libdlm.a
