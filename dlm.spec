@@ -3,7 +3,7 @@ Summary(pl):	Zarz±dca rozproszonych blokad ogólnego przeznaczenia
 Name:		dlm
 %define	_pre	pre21
 Version:	1.0
-Release:	0.%{_pre}.2
+Release:	0.%{_pre}.3
 License:	LGPL v2+
 Group:		Libraries
 Source0:	http://people.redhat.com/cfeist/cluster/tgz/%{name}-%{version}-%{_pre}.tar.gz
