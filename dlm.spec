@@ -1,18 +1,12 @@
 Summary:	General-purpose distributed lock manager
 Summary(pl):	Zarz±dca rozproszonych blokad ogólnego przeznaczenia
 Name:		dlm
-%define	_pre	pre21
-Version:	1.0
-Release:	0.%{_pre}.3
+Version:	1.01.00
+Release:	1
 License:	LGPL v2+
 Group:		Libraries
-Source0:	http://people.redhat.com/cfeist/cluster/tgz/%{name}-%{version}-%{_pre}.tar.gz
-# Source0-md5:	37d5b471549af746ff93af7cac3b5a55
-# from dlm-kernel CVS
-Source1:	%{name}.h
-# NoSource1-md5: 3a0b53233a22384762742d9b3b277969 (rev 1.12)
-Source2:	%{name}_device.h
-# NoSource2-md5: f2c1ed74c31b43b13581c48b1834e3c2 (rev 1.4)
+Source0:	ftp://sources.redhat.com/pub/cluster/releases/cluster-%{version}.tar.gz
+# Source0-md5:	e98551b02ee8ed46ae0ab8fca193d751
 URL:		http://sources.redhat.com/cluster/dlm/
 BuildRequires:	perl-base
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
@@ -53,14 +47,15 @@ Static DLM library.
 Statyczna biblioteka DLM.
 
 %prep
-%setup -q -n %{name}-%{version}-%{_pre}
+%setup -q -n cluster-%{version}
+install -d %{name}/include/cluster
+install %{name}-kernel/src/{dlm.h,dlm_device.h} %{name}/include/cluster
 
-install -d include/cluster
-cp -f %{SOURCE1} %{SOURCE2} include/cluster
-
+cd %{name}
 %{__perl} -pi -e 's/-g -O/%{rpmcflags}/' lib/Makefile
 
 %build
+cd %{name}
 ./configure \
 	--incdir=%{_includedir} \
 	--libdir=%{_libdir} \
@@ -74,6 +69,7 @@ cp -f %{SOURCE1} %{SOURCE2} include/cluster
 
 %install
 rm -rf $RPM_BUILD_ROOT
+cd %{name}
 install -d $RPM_BUILD_ROOT/%{_lib}
 
 %{__make} install \
