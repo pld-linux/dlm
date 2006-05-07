@@ -1,12 +1,12 @@
 Summary:	General-purpose distributed lock manager
 Summary(pl):	Zarz±dca rozproszonych blokad ogólnego przeznaczenia
 Name:		dlm
-Version:	1.01.00
+Version:	1.02.00
 Release:	1
 License:	LGPL v2+
 Group:		Libraries
 Source0:	ftp://sources.redhat.com/pub/cluster/releases/cluster-%{version}.tar.gz
-# Source0-md5:	e98551b02ee8ed46ae0ab8fca193d751
+# Source0-md5:	131c34c8b66d8d7d74384839ed4091d0
 URL:		http://sources.redhat.com/cluster/dlm/
 BuildRequires:	perl-base
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
