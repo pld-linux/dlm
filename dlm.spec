@@ -1,5 +1,5 @@
 Summary:	General-purpose distributed lock manager
-Summary(pl):	Zarz±dca rozproszonych blokad ogólnego przeznaczenia
+Summary(pl.UTF-8):   ZarzÄ…dca rozproszonych blokad ogÃ³lnego przeznaczenia
 Name:		dlm
 Version:	1.03.00
 Release:	1
@@ -16,34 +16,34 @@ The DLM lock manager is a kernel-based VMS-like distributed lock
 manager. It is general purpose and not specific to only GFS or CLVM.
 Kernel and userspace locking API's are available.
 
-%description -l pl
-Zarz±dca blokad DLM to oparty na j±drze zarz±dca rozproszonych blokad
-w stylu VMS. Jest ogólnego przeznaczenia, przeznaczonym nie tylko dla
-GFS-a czy CLVM-a. Dostêpne s± API blokowania w j±drze i przestrzeni
-u¿ytkownika.
+%description -l pl.UTF-8
+ZarzÄ…dca blokad DLM to oparty na jÄ…drze zarzÄ…dca rozproszonych blokad
+w stylu VMS. Jest ogÃ³lnego przeznaczenia, przeznaczonym nie tylko dla
+GFS-a czy CLVM-a. DostÄ™pne sÄ… API blokowania w jÄ…drze i przestrzeni
+uÅ¼ytkownika.
 
 %package devel
 Summary:	Header files and development documentation for DLM
-Summary(pl):	Pliki nag³ówkowe i dokumentacja programisty dla DLM-a
+Summary(pl.UTF-8):   Pliki nagÅ‚Ã³wkowe i dokumentacja programisty dla DLM-a
 Group:		Development/Libraries
 Requires:	%{name} = %{version}-%{release}
 
 %description devel
 Header files and development documentation for DLM.
 
-%description devel -l pl
-Pliki nag³ówkowe i dokumentacja programisty dla DLM-a.
+%description devel -l pl.UTF-8
+Pliki nagÅ‚Ã³wkowe i dokumentacja programisty dla DLM-a.
 
 %package static
 Summary:	Static DLM library
-Summary(pl):	Statyczna biblioteka DLM
+Summary(pl.UTF-8):   Statyczna biblioteka DLM
 Group:		Development/Libraries
 Requires:	%{name}-devel = %{version}-%{release}
 
 %description static
 Static DLM library.
 
-%description static -l pl
+%description static -l pl.UTF-8
 Statyczna biblioteka DLM.
 
 %prep
