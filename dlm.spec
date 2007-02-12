@@ -1,5 +1,5 @@
 Summary:	General-purpose distributed lock manager
-Summary(pl.UTF-8):   Zarządca rozproszonych blokad ogólnego przeznaczenia
+Summary(pl.UTF-8):	Zarządca rozproszonych blokad ogólnego przeznaczenia
 Name:		dlm
 Version:	1.03.00
 Release:	1
@@ -24,7 +24,7 @@ użytkownika.
 
 %package devel
 Summary:	Header files and development documentation for DLM
-Summary(pl.UTF-8):   Pliki nagłówkowe i dokumentacja programisty dla DLM-a
+Summary(pl.UTF-8):	Pliki nagłówkowe i dokumentacja programisty dla DLM-a
 Group:		Development/Libraries
 Requires:	%{name} = %{version}-%{release}
 
@@ -36,7 +36,7 @@ Pliki nagłówkowe i dokumentacja programisty dla DLM-a.
 
 %package static
 Summary:	Static DLM library
-Summary(pl.UTF-8):   Statyczna biblioteka DLM
+Summary(pl.UTF-8):	Statyczna biblioteka DLM
 Group:		Development/Libraries
 Requires:	%{name}-devel = %{version}-%{release}
 
