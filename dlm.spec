@@ -1,12 +1,12 @@
 Summary:	General-purpose distributed lock manager
 Summary(pl.UTF-8):	Zarządca rozproszonych blokad ogólnego przeznaczenia
 Name:		dlm
-Version:	1.03.00
+Version:	2.00.00
 Release:	1
 License:	LGPL v2+
 Group:		Libraries
 Source0:	ftp://sources.redhat.com/pub/cluster/releases/cluster-%{version}.tar.gz
-# Source0-md5:	8eea23df70d2007c4fb8c234cfea49cf
+# Source0-md5:	2ef3f4ba9d3c87b50adfc9b406171085
 URL:		http://sources.redhat.com/cluster/dlm/
 BuildRequires:	perl-base
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
@@ -48,8 +48,6 @@ Statyczna biblioteka DLM.
 
 %prep
 %setup -q -n cluster-%{version}
-install -d %{name}/include/cluster
-install %{name}-kernel/src/{dlm.h,dlm_device.h} %{name}/include/cluster
 
 cd %{name}
 %{__perl} -pi -e 's/-g -O/%{rpmcflags}/' lib/Makefile
@@ -76,7 +74,6 @@ install -d $RPM_BUILD_ROOT/%{_lib}
 	DESTDIR=$RPM_BUILD_ROOT
 
 install -d $RPM_BUILD_ROOT%{_includedir}/cluster
-install include/cluster/*.h $RPM_BUILD_ROOT%{_includedir}/cluster
 
 mv $RPM_BUILD_ROOT%{_libdir}/libdlm.so.*.* $RPM_BUILD_ROOT/%{_lib}
 ln -sf /%{_lib}/$(cd $RPM_BUILD_ROOT/%{_lib} ; echo libdlm.so.*.*) \
@@ -101,7 +98,6 @@ rm -rf $RPM_BUILD_ROOT
 %doc doc/*.txt
 %attr(755,root,root) %{_libdir}/libdlm*.so
 %{_includedir}/libdlm.h
-%{_includedir}/cluster
 
 %files static
 %defattr(644,root,root,755)
