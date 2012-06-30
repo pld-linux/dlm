@@ -2,7 +2,7 @@ Summary:	General-purpose distributed lock manager
 Summary(pl.UTF-8):	Zarządca rozproszonych blokad ogólnego przeznaczenia
 Name:		dlm
 Version:	2.03.10
-Release:	1
+Release:	2
 License:	LGPL v2.1+
 Group:		Libraries
 Source0:	ftp://sources.redhat.com/pub/cluster/releases/cluster-%{version}.tar.gz
@@ -64,7 +64,8 @@ Statyczna biblioteka DLM.
 	--without_gfs \
 	--without_gfs2 \
 	--without_gnbd \
-	--without_kernel_modules
+	--without_kernel_modules \
+	--disable_kernel_check
 
 %{__make} -C %{name}
 
