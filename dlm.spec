@@ -2,7 +2,7 @@ Summary:	General-purpose distributed lock manager
 Summary(pl.UTF-8):	Zarządca rozproszonych blokad ogólnego przeznaczenia
 Name:		dlm
 Version:	3.99.5
-Release:	1
+Release:	2
 License:	LGPL v2.1+, GPL v2
 Group:		Libraries
 Source0:	http://people.redhat.com/teigland/%{name}-%{version}.tar.gz
@@ -10,6 +10,7 @@ Source0:	http://people.redhat.com/teigland/%{name}-%{version}.tar.gz
 Patch0:		%{name}-link_order.patch
 URL:		http://sources.redhat.com/cluster/dlm/
 BuildRequires:	corosync-devel
+Obsoletes:	cluster-dlm
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
@@ -27,6 +28,7 @@ użytkownika.
 Summary:	DLM libraries
 Summary(pl.UTF-8):	Biblioteki DLM
 Group:		Development/Libraries
+Obsoletes:	cluster-dlm-libs
 Requires:	%{name} = %{version}-%{release}
 
 %description libs
@@ -39,6 +41,7 @@ Biblioteki DLM.
 Summary:	Header files and development documentation for DLM
 Summary(pl.UTF-8):	Pliki nagłówkowe i dokumentacja programisty dla DLM-a
 Group:		Development/Libraries
+Obsoletes:	cluster-dlm-devel
 Requires:	%{name}-libs = %{version}-%{release}
 
 %description devel
