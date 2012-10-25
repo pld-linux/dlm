@@ -2,7 +2,7 @@ Summary:	General-purpose distributed lock manager
 Summary(pl.UTF-8):	Zarządca rozproszonych blokad ogólnego przeznaczenia
 Name:		dlm
 Version:	3.99.5
-Release:	0.1
+Release:	1
 License:	LGPL v2.1+, GPL v2
 Group:		Libraries
 Source0:	http://people.redhat.com/teigland/%{name}-%{version}.tar.gz
@@ -70,7 +70,7 @@ rm -rf $RPM_BUILD_ROOT
 	BINDIR=%{_sbindir} \
 	LIBDIR=%{_libdir} \
 	MANDIR=%{_mandir} \
-	HDRDIR=%{_includedir} 
+	HDRDIR=%{_includedir}
 
 
 %clean
@@ -85,7 +85,7 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_sbindir}/*
 /lib/udev/rules.d/51-dlm.rules
 %{_mandir}/man8/*.8*
-%{_mandir}/man5/dlm.conf.5.gz
+%{_mandir}/man5/dlm.conf.5*
 
 %files libs
 %defattr(644,root,root,755)
