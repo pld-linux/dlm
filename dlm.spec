@@ -1,3 +1,6 @@
+# Conditional build:
+%bcond_without	dlm_stonith	# build without fencing helper
+#
 Summary:	General-purpose distributed lock manager
 Summary(pl.UTF-8):	Zarządca rozproszonych blokad ogólnego przeznaczenia
 Name:		dlm
@@ -12,8 +15,10 @@ Source2:	%{name}.sysconfig
 Source3:	%{name}.tmpfiles
 Patch0:		%{name}-link_order.patch
 Patch1:		%{name}-after_configfs.patch
+Patch2:		dlm_stonith-build.patch
 URL:		http://sources.redhat.com/cluster/dlm/
 BuildRequires:	corosync-devel
+%{?with_dlm_stonith:BuildRequires:	corosync-devel}
 Requires:	%{name}-libs = %{version}-%{release}
 Obsoletes:	cluster-dlm
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
@@ -58,6 +63,7 @@ Pliki nagłówkowe i dokumentacja programisty dla DLM-a.
 %setup -q
 %patch0 -p1
 %patch1 -p1
+%patch2 -p1
 
 %build
 %{__make} \
@@ -68,6 +74,17 @@ Pliki nagłówkowe i dokumentacja programisty dla DLM-a.
 	MANDIR=%{_mandir} \
 	HDRDIR=%{_includedir} \
 	CC="%{__cc} %{rpmcflags} %{rpmcppflags} %{rpmldflags}"
+
+%if %{with dlm_stonith}
+%{__make} -C fence \
+	PREFIX=%{_prefix} \
+	LIBNUM=%{_lib} \
+	BINDIR=%{_sbindir} \
+	LIBDIR=%{_libdir} \
+	MANDIR=%{_mandir} \
+	HDRDIR=%{_includedir} \
+	CC="%{__cc} %{rpmcflags} %{rpmcppflags} %{rpmldflags}"
+%endif
 
 %install
 rm -rf $RPM_BUILD_ROOT
@@ -82,6 +99,17 @@ install -d $RPM_BUILD_ROOT{%{systemdunitdir},/etc/{rc.d/init.d,sysconfig}} \
 	LIBDIR=%{_libdir} \
 	MANDIR=%{_mandir} \
 	HDRDIR=%{_includedir}
+
+%if %{with dlm_stonith}
+%{__make} -C fence install \
+	DESTDIR=$RPM_BUILD_ROOT \
+	PREFIX=%{_prefix} \
+	LIBNUM=%{_lib} \
+	BINDIR=%{_sbindir} \
+	LIBDIR=%{_libdir} \
+	MANDIR=%{_mandir} \
+	HDRDIR=%{_includedir}
+%endif
 
 install init/%{name}.service $RPM_BUILD_ROOT%{systemdunitdir}
 install %{SOURCE1} $RPM_BUILD_ROOT/etc/rc.d/init.d/%{name}

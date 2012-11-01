@@ -1,0 +1,11 @@
+diff -dur dlm-3.99.5.org/fence/stonith_helper.c dlm-3.99.5/fence/stonith_helper.c
+--- dlm-3.99.5.org/fence/stonith_helper.c	2012-06-21 23:53:56.000000000 +0200
++++ dlm-3.99.5/fence/stonith_helper.c	2012-11-01 19:47:34.000000000 +0100
+@@ -11,6 +11,7 @@
+ #include <string.h>
+ #include <unistd.h>
+ #include <syslog.h>
++#include <errno.h>
+ #include <pacemaker/crm/stonith-ng.h>
+ 
+ int nodeid;
