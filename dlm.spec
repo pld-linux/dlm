@@ -68,7 +68,7 @@ Pliki nagłówkowe i dokumentacja programisty dla DLM-a.
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT%{systemdunitdir}
+install -d $RPM_BUILD_ROOT{%{systemdunitdir},/etc/{rc.d/init.d,sysconfig}}
 
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT \
@@ -80,6 +80,8 @@ install -d $RPM_BUILD_ROOT%{systemdunitdir}
 	HDRDIR=%{_includedir}
 
 install init/%{name}.service $RPM_BUILD_ROOT%{systemdunitdir}
+install init/%{name}.sysconfig $RPM_BUILD_ROOT/etc/sysconfig/%{name}
+install init/%{name}.init $RPM_BUILD_ROOT/etc/rc.d/init.d/%{name}
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -88,9 +90,15 @@ rm -rf $RPM_BUILD_ROOT
 %systemd_post %{name}.service
 
 %preun
+/sbin/chkconfig --add %{name}
+%service %{name} restart
 %systemd_preun %{name}.service
 
 %postun
+if [ "$1" = "0" ]; then
+	%service -q %{name} stop
+	/sbin/chkconfig --del %{name}
+fi
 %systemd_reload
 
 %post	libs -p /sbin/ldconfig
@@ -101,6 +109,8 @@ rm -rf $RPM_BUILD_ROOT
 %doc README.license
 %attr(755,root,root) %{_sbindir}/*
 /lib/udev/rules.d/51-dlm.rules
+%attr(754,root,root) /etc/rc.d/init.d/%{name}
+%verify(not md5 mtime size) %config(noreplace) /etc/sysconfig/%{name}
 %{_mandir}/man8/*.8*
 %{_mandir}/man5/dlm.conf.5*
 %{systemdunitdir}/%{name}.service
