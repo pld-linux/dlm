@@ -1,0 +1,3 @@
+# DLM_CONTROLD_OPTS -- set command line options for dlm_controld
+# See dlm_controld man page for list of options.
+DLM_CONTROLD_OPTS=""

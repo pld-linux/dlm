@@ -2,11 +2,13 @@ Summary:	General-purpose distributed lock manager
 Summary(pl.UTF-8):	Zarządca rozproszonych blokad ogólnego przeznaczenia
 Name:		dlm
 Version:	3.99.5
-Release:	2
+Release:	3
 License:	LGPL v2.1+, GPL v2
 Group:		Libraries
 Source0:	http://people.redhat.com/teigland/%{name}-%{version}.tar.gz
 # Source0-md5:	cad4999d0c42000bf5898af34f587728
+Source1:	%{name}.init
+Source2:	%{name}.sysconfig
 Patch0:		%{name}-link_order.patch
 Patch1:		%{name}-after_configfs.patch
 URL:		http://sources.redhat.com/cluster/dlm/
@@ -80,8 +82,8 @@ install -d $RPM_BUILD_ROOT{%{systemdunitdir},/etc/{rc.d/init.d,sysconfig}}
 	HDRDIR=%{_includedir}
 
 install init/%{name}.service $RPM_BUILD_ROOT%{systemdunitdir}
-install init/%{name}.sysconfig $RPM_BUILD_ROOT/etc/sysconfig/%{name}
-install init/%{name}.init $RPM_BUILD_ROOT/etc/rc.d/init.d/%{name}
+install %{SOURCE1} $RPM_BUILD_ROOT/etc/rc.d/init.d/%{name}
+install %{SOURCE2} $RPM_BUILD_ROOT/etc/sysconfig/%{name}
 
 %clean
 rm -rf $RPM_BUILD_ROOT

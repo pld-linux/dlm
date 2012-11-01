@@ -1,0 +1,85 @@
+#!/bin/sh
+#
+# dlm_controld
+#
+# chkconfig: 22 78
+# description: starts and stops dlm_controld
+#
+
+. /etc/rc.d/init.d/functions
+
+DLM_CONTROLD_OPTS=""
+
+[ -f /etc/sysconfig/dlm ] && . /etc/sysconfig/dlm
+
+setup() {
+	modprobe dlm > /dev/null 2>&1
+	mount -t configfs none /sys/kernel/config > /dev/null 2>&1
+}
+
+start() {
+
+	# Check if the service is already running?
+	if [ -f /var/lock/subsys/dlm ]; then
+		msg_already_running "dlm_controld"
+		return
+	fi
+
+	setup
+
+	msg_starting "dlm_controld"
+
+	daemon /usr/sbin/dlm_controld $DLM_CONTROLD_OPTS
+	RETVAL=$?
+	[ $RETVAL -eq 0 ] && touch /var/lock/subsys/dlm
+}
+
+stop() {
+	if [ ! -f /var/lock/subsys/dlm ]; then
+		msg_not_running "dlm_controld"
+		return
+	fi
+
+	msg_stopping "dlm_controld"
+	killproc dlm_controld
+	rm -f /var/lock/subsys/dlm
+}
+
+condrestart() {
+	if [ ! -f /var/lock/subsys/dlm ]; then
+		msg_not_running "dlm_controld"
+		RETVAL=$1
+		return
+	fi
+
+	stop
+	start
+}
+
+# See how we were called.
+case "$1" in
+  start)
+  	start
+	;;
+  stop)
+  	stop
+	;;
+  restart)
+	stop
+	start
+	;;
+  try-restart)
+	condrestart 0
+	;;
+  force-reload)
+	condrestart 0
+	;;
+  status)
+	status --pidfile /var/run/dlm/dlm_controld.pid dlm dlm_controld
+	exit $?
+	;;
+  *)
+	msg_usage "$0 {start|stop|restart|try-restart|force-reload|status}"
+	exit 3
+esac
+exit $RETVAL
