@@ -14,6 +14,7 @@ Patch0:		%{name}-link_order.patch
 Patch1:		%{name}-after_configfs.patch
 URL:		http://sources.redhat.com/cluster/dlm/
 BuildRequires:	corosync-devel
+Requires:	%{name}-libs = %{version}-%{release}
 Obsoletes:	cluster-dlm
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
@@ -33,7 +34,6 @@ Summary:	DLM libraries
 Summary(pl.UTF-8):	Biblioteki DLM
 Group:		Development/Libraries
 Obsoletes:	cluster-dlm-libs
-Requires:	%{name} = %{version}-%{release}
 
 %description libs
 DLM libraries.
