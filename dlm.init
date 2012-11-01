@@ -2,7 +2,7 @@
 #
 # dlm_controld
 #
-# chkconfig: 22 78
+# chkconfig: 345 22 78
 # description: starts and stops dlm_controld
 #
 
