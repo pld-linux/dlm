@@ -8,6 +8,7 @@ Group:		Libraries
 Source0:	http://people.redhat.com/teigland/%{name}-%{version}.tar.gz
 # Source0-md5:	cad4999d0c42000bf5898af34f587728
 Patch0:		%{name}-link_order.patch
+Patch1:		%{name}-after_configfs.patch
 URL:		http://sources.redhat.com/cluster/dlm/
 BuildRequires:	corosync-devel
 Obsoletes:	cluster-dlm
@@ -53,6 +54,7 @@ Pliki nagłówkowe i dokumentacja programisty dla DLM-a.
 %prep
 %setup -q
 %patch0 -p1
+%patch1 -p1
 
 %build
 %{__make} \

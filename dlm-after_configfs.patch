@@ -1,0 +1,11 @@
+diff -dur dlm-3.99.5.orig/init/dlm.service dlm-3.99.5/init/dlm.service
+--- dlm-3.99.5.orig/init/dlm.service	2012-06-21 23:53:56.000000000 +0200
++++ dlm-3.99.5/init/dlm.service	2012-11-01 15:24:17.000000000 +0100
+@@ -1,6 +1,6 @@
+ [Unit]
+ Description=dlm control daemon
+-After=syslog.target network.target corosync.service
++After=syslog.target network.target corosync.service sys-kernel-config.mount
+ 
+ [Service]
+ Type=forking
