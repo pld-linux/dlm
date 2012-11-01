@@ -66,6 +66,8 @@ Pliki nagłówkowe i dokumentacja programisty dla DLM-a.
 
 %install
 rm -rf $RPM_BUILD_ROOT
+install -d $RPM_BUILD_ROOT%{systemdunitdir}
+
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT \
 	PREFIX=%{_prefix} \
@@ -80,6 +82,15 @@ install init/%{name}.service $RPM_BUILD_ROOT%{systemdunitdir}
 %clean
 rm -rf $RPM_BUILD_ROOT
 
+%post
+%systemd_post %{name}.service
+
+%preun
+%systemd_preun %{name}.service
+
+%postun
+%systemd_reload
+
 %post	libs -p /sbin/ldconfig
 %postun	libs -p /sbin/ldconfig
 
@@ -90,6 +101,7 @@ rm -rf $RPM_BUILD_ROOT
 /lib/udev/rules.d/51-dlm.rules
 %{_mandir}/man8/*.8*
 %{_mandir}/man5/dlm.conf.5*
+%{systemdunitdir}/%{name}.service
 
 %files libs
 %defattr(644,root,root,755)
