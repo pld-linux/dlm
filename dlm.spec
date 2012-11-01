@@ -9,6 +9,7 @@ Source0:	http://people.redhat.com/teigland/%{name}-%{version}.tar.gz
 # Source0-md5:	cad4999d0c42000bf5898af34f587728
 Source1:	%{name}.init
 Source2:	%{name}.sysconfig
+Source3:	%{name}.tmpfiles
 Patch0:		%{name}-link_order.patch
 Patch1:		%{name}-after_configfs.patch
 URL:		http://sources.redhat.com/cluster/dlm/
@@ -70,7 +71,8 @@ Pliki nagłówkowe i dokumentacja programisty dla DLM-a.
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT{%{systemdunitdir},/etc/{rc.d/init.d,sysconfig}}
+install -d $RPM_BUILD_ROOT{%{systemdunitdir},/etc/{rc.d/init.d,sysconfig}} \
+               $RPM_BUILD_ROOT{/var/run/dlm,%{systemdtmpfilesdir}}
 
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT \
@@ -84,6 +86,7 @@ install -d $RPM_BUILD_ROOT{%{systemdunitdir},/etc/{rc.d/init.d,sysconfig}}
 install init/%{name}.service $RPM_BUILD_ROOT%{systemdunitdir}
 install %{SOURCE1} $RPM_BUILD_ROOT/etc/rc.d/init.d/%{name}
 install %{SOURCE2} $RPM_BUILD_ROOT/etc/sysconfig/%{name}
+install %{SOURCE3} $RPM_BUILD_ROOT%{systemdtmpfilesdir}/%{name}.conf
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -116,6 +119,8 @@ fi
 %{_mandir}/man8/*.8*
 %{_mandir}/man5/dlm.conf.5*
 %{systemdunitdir}/%{name}.service
+%{systemdtmpfilesdir}/%{name}.conf
+%dir /var/run/dlm
 
 %files libs
 %defattr(644,root,root,755)
