@@ -13,7 +13,7 @@ DLM_CONTROLD_OPTS=""
 [ -f /etc/sysconfig/dlm ] && . /etc/sysconfig/dlm
 
 setup() {
-	modprobe dlm > /dev/null 2>&1
+	/sbin/modprobe -q dlm
 	mount -t configfs none /sys/kernel/config > /dev/null 2>&1
 }
 
