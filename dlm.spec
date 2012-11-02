@@ -15,14 +15,14 @@ Source2:	%{name}.sysconfig
 Source3:	%{name}.tmpfiles
 Patch0:		%{name}-link_order.patch
 Patch1:		%{name}-after_configfs.patch
-Patch2:		dlm_stonith-build.patch
+Patch2:		%{name}_stonith-build.patch
 URL:		http://sources.redhat.com/cluster/dlm/
 BuildRequires:	corosync-devel
 %{?with_dlm_stonith:BuildRequires:	corosync-devel}
 BuildRequires:	rpmbuild(macros) >= 1.644
+Requires:	%{name}-libs = %{version}-%{release}
 Requires:	rc-scripts
 Requires:	systemd-units >= 38
-Requires:	%{name}-libs = %{version}-%{release}
 Requires(post,preun):	/sbin/chkconfig
 Obsoletes:	cluster-dlm
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
@@ -54,8 +54,8 @@ Biblioteki DLM.
 Summary:	Header files and development documentation for DLM
 Summary(pl.UTF-8):	Pliki nagłówkowe i dokumentacja programisty dla DLM-a
 Group:		Development/Libraries
-Obsoletes:	cluster-dlm-devel
 Requires:	%{name}-libs = %{version}-%{release}
+Obsoletes:	cluster-dlm-devel
 
 %description devel
 Header files and development documentation for DLM.
