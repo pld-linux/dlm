@@ -16,8 +16,8 @@ diff -dur dlm-3.99.5.orig/fence/stonith_helper.c dlm-3.99.5/fence/stonith_helper
 +	int arg0_l;
 +
 +	arg0_l = strlen(argv[0]);
-+	if (arg0_l>7 && !strcmp(argv[arg0_l-7], "_reboot")) turn_off=0;
-+	else if (arg0_l>4 && !strcmp(argv[arg0_l-4], "_off")) turn_off=1;
++	if (arg0_l>7 && !strcmp(argv[0][arg0_l-7], "_reboot")) turn_off=0;
++	else if (arg0_l>4 && !strcmp(argv[0][arg0_l-4], "_off")) turn_off=1;
  
  	if (argc > 1) {
  		while ((c = getopt(argc, argv, "n:t:")) != -1) {
