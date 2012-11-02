@@ -21,10 +21,12 @@ Patch3:		%{name}-mem_init.patch
 Patch4:		%{name}-signals.patch
 Patch5:		0003-dlm_controld-remove-fence_all-from-cli.patch
 Patch6:		dlm_stonith_reboot.patch
+Patch7:		dlm-startup_notify.patch
 URL:		http://sources.redhat.com/cluster/dlm/
 BuildRequires:	corosync-devel >= 2.0
 %{?with_dlm_stonith:BuildRequires:	pacemaker-devel >= 1.1}
 BuildRequires:	rpmbuild(macros) >= 1.644
+BuildRequires:	systemd-devel
 Requires:	%{name}-libs = %{version}-%{release}
 Requires:	rc-scripts
 Requires:	systemd-units >= 38
@@ -77,6 +79,7 @@ Pliki nagłówkowe i dokumentacja programisty dla DLM-a.
 %patch4 -p1
 %patch5 -p1
 %patch6 -p1
+%patch7 -p1
 
 %build
 %{__make} \
