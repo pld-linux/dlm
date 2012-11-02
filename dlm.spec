@@ -23,7 +23,7 @@ Patch5:		0003-dlm_controld-remove-fence_all-from-cli.patch
 Patch6:		dlm_stonith_reboot.patch
 URL:		http://sources.redhat.com/cluster/dlm/
 BuildRequires:	corosync-devel
-%{?with_dlm_stonith:BuildRequires:	corosync-devel}
+%{?with_dlm_stonith:BuildRequires:	pacemaker-devel >= 1.1}
 BuildRequires:	rpmbuild(macros) >= 1.644
 Requires:	%{name}-libs = %{version}-%{release}
 Requires:	rc-scripts
