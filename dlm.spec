@@ -19,7 +19,11 @@ Patch2:		dlm_stonith-build.patch
 URL:		http://sources.redhat.com/cluster/dlm/
 BuildRequires:	corosync-devel
 %{?with_dlm_stonith:BuildRequires:	corosync-devel}
+BuildRequires:	rpmbuild(macros) >= 1.644
+Requires:	rc-scripts
+Requires:	systemd-units >= 38
 Requires:	%{name}-libs = %{version}-%{release}
+Requires(post,preun):	/sbin/chkconfig
 Obsoletes:	cluster-dlm
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
