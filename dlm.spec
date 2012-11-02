@@ -13,6 +13,7 @@ Source0:	http://people.redhat.com/teigland/%{name}-%{version}.tar.gz
 Source1:	%{name}.init
 Source2:	%{name}.sysconfig
 Source3:	%{name}.tmpfiles
+Source4:	dlm.conf
 Patch0:		%{name}-link_order.patch
 Patch1:		%{name}-after_configfs.patch
 Patch2:		%{name}_stonith-build.patch
@@ -101,6 +102,7 @@ Pliki nagłówkowe i dokumentacja programisty dla DLM-a.
 %install
 rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT{%{systemdunitdir},/etc/{rc.d/init.d,sysconfig}} \
+               $RPM_BUILD_ROOT%{_sysconfdir}/%{name} \
                $RPM_BUILD_ROOT{/var/run/dlm,%{systemdtmpfilesdir}}
 
 %{__make} install \
@@ -130,6 +132,7 @@ install init/%{name}.service $RPM_BUILD_ROOT%{systemdunitdir}
 install %{SOURCE1} $RPM_BUILD_ROOT/etc/rc.d/init.d/%{name}
 install %{SOURCE2} $RPM_BUILD_ROOT/etc/sysconfig/%{name}
 install %{SOURCE3} $RPM_BUILD_ROOT%{systemdtmpfilesdir}/%{name}.conf
+install %{SOURCE4} $RPM_BUILD_ROOT%{_sysconfdir}/%{name}/%{name}.conf
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -156,6 +159,8 @@ fi
 %defattr(644,root,root,755)
 %doc README.license
 %attr(755,root,root) %{_sbindir}/*
+%dir %{_sysconfdir}/%{name}
+%verify(not md5 mtime size) %config(noreplace) %{_sysconfdir}/%{name}/%{name}.conf
 /lib/udev/rules.d/51-dlm.rules
 %attr(754,root,root) /etc/rc.d/init.d/%{name}
 %verify(not md5 mtime size) %config(noreplace) /etc/sysconfig/%{name}
