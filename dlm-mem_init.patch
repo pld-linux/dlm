@@ -1,0 +1,11 @@
+diff -dur dlm-3.99.5.orig/dlm_controld/fence_config.c dlm-3.99.5/dlm_controld/fence_config.c
+--- dlm-3.99.5.orig/dlm_controld/fence_config.c	2012-06-21 23:53:56.000000000 +0200
++++ dlm-3.99.5/dlm_controld/fence_config.c	2012-11-02 08:31:53.000000000 +0100
+@@ -251,6 +251,7 @@
+ 				rv = -ENOMEM;
+ 				goto out;
+ 			}
++			memset(dev, 0, sizeof(struct fence_device));
+ 
+ 			rv = sscanf(line, "%s %s %[^\n]s\n", dev->name, dev->agent, dev->args);
+ 			if (rv < 2) {

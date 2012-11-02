@@ -16,6 +16,7 @@ Source3:	%{name}.tmpfiles
 Patch0:		%{name}-link_order.patch
 Patch1:		%{name}-after_configfs.patch
 Patch2:		%{name}_stonith-build.patch
+Patch3:		%{name}-mem_init.patch
 URL:		http://sources.redhat.com/cluster/dlm/
 BuildRequires:	corosync-devel
 %{?with_dlm_stonith:BuildRequires:	corosync-devel}
@@ -68,6 +69,7 @@ Pliki nagłówkowe i dokumentacja programisty dla DLM-a.
 %patch0 -p1
 %patch1 -p1
 %patch2 -p1
+%patch3 -p1
 
 %build
 %{__make} \
