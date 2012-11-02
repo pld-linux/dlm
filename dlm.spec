@@ -19,6 +19,7 @@ Patch2:		%{name}_stonith-build.patch
 Patch3:		%{name}-mem_init.patch
 Patch4:		%{name}-signals.patch
 Patch5:		0003-dlm_controld-remove-fence_all-from-cli.patch
+Patch6:		dlm_stonith_reboot.patch
 URL:		http://sources.redhat.com/cluster/dlm/
 BuildRequires:	corosync-devel
 %{?with_dlm_stonith:BuildRequires:	corosync-devel}
@@ -74,6 +75,7 @@ Pliki nagłówkowe i dokumentacja programisty dla DLM-a.
 %patch3 -p1
 %patch4 -p1
 %patch5 -p1
+%patch6 -p1
 
 %build
 %{__make} \
@@ -119,6 +121,9 @@ install -d $RPM_BUILD_ROOT{%{systemdunitdir},/etc/{rc.d/init.d,sysconfig}} \
 	LIBDIR=%{_libdir} \
 	MANDIR=%{_mandir} \
 	HDRDIR=%{_includedir}
+
+ln -s dlm_stonith $RPM_BUILD_ROOT%{_sbindir}/dlm_stonith_reboot
+ln -s dlm_stonith $RPM_BUILD_ROOT%{_sbindir}/dlm_stonith_off
 %endif
 
 install init/%{name}.service $RPM_BUILD_ROOT%{systemdunitdir}
