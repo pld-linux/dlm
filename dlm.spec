@@ -5,7 +5,7 @@ Summary:	General-purpose distributed lock manager
 Summary(pl.UTF-8):	Zarządca rozproszonych blokad ogólnego przeznaczenia
 Name:		dlm
 Version:	3.99.5
-Release:	3
+Release:	4
 License:	LGPL v2.1+, GPL v2
 Group:		Libraries
 Source0:	http://people.redhat.com/teigland/%{name}-%{version}.tar.gz
