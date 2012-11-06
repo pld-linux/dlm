@@ -5,7 +5,7 @@ Summary:	General-purpose distributed lock manager
 Summary(pl.UTF-8):	Zarządca rozproszonych blokad ogólnego przeznaczenia
 Name:		dlm
 Version:	3.99.5
-Release:	4
+Release:	5
 License:	LGPL v2.1+, GPL v2
 Group:		Libraries
 Source0:	http://people.redhat.com/teigland/%{name}-%{version}.tar.gz
@@ -20,7 +20,7 @@ Patch2:		%{name}_stonith-build.patch
 Patch3:		%{name}-mem_init.patch
 Patch4:		%{name}-signals.patch
 Patch5:		0003-dlm_controld-remove-fence_all-from-cli.patch
-Patch6:		dlm_stonith_reboot.patch
+Patch6:		dlm_stonith-reboot.patch
 Patch7:		dlm-startup_notify.patch
 URL:		http://sources.redhat.com/cluster/dlm/
 BuildRequires:	corosync-devel >= 2.0
@@ -126,9 +126,6 @@ install -d $RPM_BUILD_ROOT{%{systemdunitdir},/etc/{rc.d/init.d,sysconfig}} \
 	LIBDIR=%{_libdir} \
 	MANDIR=%{_mandir} \
 	HDRDIR=%{_includedir}
-
-ln -s dlm_stonith $RPM_BUILD_ROOT%{_sbindir}/dlm_stonith_reboot
-ln -s dlm_stonith $RPM_BUILD_ROOT%{_sbindir}/dlm_stonith_off
 %endif
 
 install init/%{name}.service $RPM_BUILD_ROOT%{systemdunitdir}
