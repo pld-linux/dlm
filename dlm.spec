@@ -4,24 +4,17 @@
 Summary:	General-purpose distributed lock manager
 Summary(pl.UTF-8):	Zarządca rozproszonych blokad ogólnego przeznaczenia
 Name:		dlm
-Version:	3.99.5
-Release:	5
+Version:	4.0.0
+Release:	1
 License:	LGPL v2.1+, GPL v2
 Group:		Libraries
 Source0:	http://people.redhat.com/teigland/%{name}-%{version}.tar.gz
-# Source0-md5:	cad4999d0c42000bf5898af34f587728
+# Source0-md5:	2db31a9728ede91a202ff6f3e5accf8d
 Source1:	%{name}.init
 Source2:	%{name}.sysconfig
 Source3:	%{name}.tmpfiles
 Source4:	dlm.conf
-Patch0:		%{name}-link_order.patch
-Patch1:		%{name}-after_configfs.patch
-Patch2:		%{name}_stonith-build.patch
-Patch3:		%{name}-mem_init.patch
-Patch4:		%{name}-signals.patch
-Patch5:		0003-dlm_controld-remove-fence_all-from-cli.patch
-Patch6:		dlm_stonith-reboot.patch
-Patch7:		dlm-startup_notify.patch
+Patch0:		%{name}-perms.patch
 URL:		http://sources.redhat.com/cluster/dlm/
 BuildRequires:	corosync-devel >= 2.0
 %{?with_dlm_stonith:BuildRequires:	pacemaker-devel >= 1.1}
@@ -73,13 +66,6 @@ Pliki nagłówkowe i dokumentacja programisty dla DLM-a.
 %prep
 %setup -q
 %patch0 -p1
-%patch1 -p1
-%patch2 -p1
-%patch3 -p1
-%patch4 -p1
-%patch5 -p1
-%patch6 -p1
-%patch7 -p1
 
 %build
 %{__make} \
