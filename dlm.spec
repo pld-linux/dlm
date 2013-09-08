@@ -1,22 +1,25 @@
+#
 # Conditional build:
 %bcond_without	dlm_stonith	# build without fencing helper
 #
 Summary:	General-purpose distributed lock manager
 Summary(pl.UTF-8):	Zarządca rozproszonych blokad ogólnego przeznaczenia
 Name:		dlm
-Version:	4.0.1
+Version:	4.0.2
 Release:	1
 License:	LGPL v2.1+, GPL v2
 Group:		Libraries
 Source0:	https://git.fedorahosted.org/cgit/dlm.git/snapshot/%{name}-%{version}.tar.bz2
-# Source0-md5:	3cd0b0830b1f5fcfdc58c83c5c2ca37b
+# Source0-md5:	87703eae3fb4a3312c10cc1b58f064b8
 Source1:	%{name}.init
 Source2:	%{name}.sysconfig
 Source3:	%{name}.tmpfiles
 Source4:	dlm.conf
 URL:		http://sources.redhat.com/cluster/dlm/
 BuildRequires:	corosync-devel >= 2.0
+%{?with_dlm_stonith:BuildRequires:	libxml2-devel >= 2.0}
 %{?with_dlm_stonith:BuildRequires:	pacemaker-devel >= 1.1}
+BuildRequires:	pkgconfig
 BuildRequires:	rpmbuild(macros) >= 1.644
 BuildRequires:	systemd-devel
 Requires:	%{name}-libs = %{version}-%{release}
@@ -142,13 +145,16 @@ fi
 %files
 %defattr(644,root,root,755)
 %doc README.license
-%attr(755,root,root) %{_sbindir}/*
+%{?with_dlm_stonith:%attr(755,root,root) %{_sbindir}/dlm_controld}
+%attr(755,root,root) %{_sbindir}/dlm_stonith
+%attr(755,root,root) %{_sbindir}/dlm_tool
 %dir %{_sysconfdir}/%{name}
 %verify(not md5 mtime size) %config(noreplace) %{_sysconfdir}/%{name}/%{name}.conf
 /lib/udev/rules.d/51-dlm.rules
 %attr(754,root,root) /etc/rc.d/init.d/%{name}
 %verify(not md5 mtime size) %config(noreplace) /etc/sysconfig/%{name}
-%{_mandir}/man8/*.8*
+%{_mandir}/man8/dlm_controld.8*
+%{_mandir}/man8/dlm_tool.8*
 %{_mandir}/man5/dlm.conf.5*
 %{systemdunitdir}/%{name}.service
 %{systemdtmpfilesdir}/%{name}.conf
@@ -156,12 +162,12 @@ fi
 
 %files libs
 %defattr(644,root,root,755)
-%ghost %{_libdir}/libdlm.so.3
 %attr(755,root,root) %{_libdir}/libdlm.so.3.*
-%ghost %{_libdir}/libdlm_lt.so.3
+%attr(755,root,root) %ghost %{_libdir}/libdlm.so.3
 %attr(755,root,root) %{_libdir}/libdlm_lt.so.3.*
-%ghost %{_libdir}/libdlmcontrol.so.3
+%attr(755,root,root) %ghost %{_libdir}/libdlm_lt.so.3
 %attr(755,root,root) %{_libdir}/libdlmcontrol.so.3.*
+%attr(755,root,root) %ghost %{_libdir}/libdlmcontrol.so.3
 
 %files devel
 %defattr(644,root,root,755)
@@ -174,4 +180,3 @@ fi
 %{_mandir}/man3/libdlm.3*
 %{_pkgconfigdir}/libdlm.pc
 %{_pkgconfigdir}/libdlm_lt.pc
-
