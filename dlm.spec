@@ -15,6 +15,7 @@ Source1:	%{name}.init
 Source2:	%{name}.sysconfig
 Source3:	%{name}.tmpfiles
 Source4:	dlm.conf
+Patch0:		%{name}-systemd-configfs.patch
 URL:		http://sources.redhat.com/cluster/dlm/
 BuildRequires:	corosync-devel >= 2.0
 %{?with_dlm_stonith:BuildRequires:	libxml2-devel >= 2.0}
@@ -24,7 +25,7 @@ BuildRequires:	rpmbuild(macros) >= 1.644
 BuildRequires:	systemd-devel
 Requires:	%{name}-libs = %{version}-%{release}
 Requires:	rc-scripts
-Requires:	systemd-units >= 38
+Requires:	systemd-units >= 208-8
 Requires(post,preun):	/sbin/chkconfig
 Obsoletes:	cluster-dlm
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
@@ -67,6 +68,8 @@ Pliki nagłówkowe i dokumentacja programisty dla DLM-a.
 
 %prep
 %setup -q
+
+%patch0 -p1
 
 %build
 %{__make} \

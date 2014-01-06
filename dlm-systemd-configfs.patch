@@ -1,0 +1,10 @@
+diff -dur dlm-4.0.2.orig/init/dlm.service dlm-4.0.2/init/dlm.service
+--- dlm-4.0.2.orig/init/dlm.service	2013-07-31 17:50:26.000000000 +0200
++++ dlm-4.0.2/init/dlm.service	2014-01-06 12:07:28.823033320 +0100
+@@ -1,5 +1,6 @@
+ [Unit]
+ Description=dlm control daemon
++Requires=sys-kernel-config.mount
+ After=syslog.target network.target corosync.service sys-kernel-config.mount
+ 
+ [Service]
