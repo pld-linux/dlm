@@ -6,7 +6,7 @@ Summary:	General-purpose distributed lock manager
 Summary(pl.UTF-8):	Zarządca rozproszonych blokad ogólnego przeznaczenia
 Name:		dlm
 Version:	4.0.2
-Release:	1
+Release:	2
 License:	LGPL v2.1+, GPL v2
 Group:		Libraries
 Source0:	https://git.fedorahosted.org/cgit/dlm.git/snapshot/%{name}-%{version}.tar.bz2
@@ -16,6 +16,7 @@ Source2:	%{name}.sysconfig
 Source3:	%{name}.tmpfiles
 Source4:	dlm.conf
 Patch0:		%{name}-systemd-configfs.patch
+Patch1:     fix_status_printing.patch
 URL:		http://sources.redhat.com/cluster/dlm/
 BuildRequires:	corosync-devel >= 2.0
 %{?with_dlm_stonith:BuildRequires:	libxml2-devel >= 2.0}
@@ -70,6 +71,7 @@ Pliki nagłówkowe i dokumentacja programisty dla DLM-a.
 %setup -q
 
 %patch0 -p1
+%patch1 -p1
 
 %build
 %{__make} \
