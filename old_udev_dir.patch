@@ -1,0 +1,21 @@
+commit 18c53486d8800c9e1a8a82ccd048825b4584ebc6
+Author: Mariusz Mazur <mmazur@axeos.com>
+Date:   Mon Jun 30 12:19:36 2014 +0200
+
+    Revert "libdlm: udev dir now under /usr/lib"
+    
+    This reverts commit 102d3c248c59f8f36a9d5088afd4eed787583e04.
+
+diff --git a/libdlm/Makefile b/libdlm/Makefile
+index e7cdb17..76d3504 100644
+--- a/libdlm/Makefile
++++ b/libdlm/Makefile
+@@ -5,7 +5,7 @@ LIBDIR=$(PREFIX)/$(LIBNUM)
+ HDRDIR=$(PREFIX)/include 
+ MANDIR=$(PREFIX)/share/man
+ PKGDIR=$(LIBDIR)/pkgconfig
+-UDEVDIR=/usr/lib/udev/rules.d
++UDEVDIR=/lib/udev/rules.d
+ 
+ LIB_NAME = libdlm
+ LIB_MAJOR = 3

@@ -5,18 +5,19 @@
 Summary:	General-purpose distributed lock manager
 Summary(pl.UTF-8):	Zarządca rozproszonych blokad ogólnego przeznaczenia
 Name:		dlm
-Version:	4.0.2
-Release:	2
+%define     _snap   4283123f0b13eafc46d825050c5142cf44be79c3
+Version:	4.0.3
+Release:	0.1
 License:	LGPL v2.1+, GPL v2
 Group:		Libraries
-Source0:	https://git.fedorahosted.org/cgit/dlm.git/snapshot/%{name}-%{version}.tar.bz2
-# Source0-md5:	87703eae3fb4a3312c10cc1b58f064b8
+Source0:	https://git.fedorahosted.org/cgit/dlm.git/snapshot/%{name}-%{_snap}.tar.bz2
+# Source0-md5:	575174a0d7b0e1a6e45ec88f447c48cc
 Source1:	%{name}.init
 Source2:	%{name}.sysconfig
 Source3:	%{name}.tmpfiles
 Source4:	dlm.conf
 Patch0:		%{name}-systemd-configfs.patch
-Patch1:     fix_status_printing.patch
+Patch1:     old_udev_dir.patch
 URL:		http://sources.redhat.com/cluster/dlm/
 BuildRequires:	corosync-devel >= 2.0
 %{?with_dlm_stonith:BuildRequires:	libxml2-devel >= 2.0}
@@ -68,7 +69,7 @@ Header files and development documentation for DLM.
 Pliki nagłówkowe i dokumentacja programisty dla DLM-a.
 
 %prep
-%setup -q
+%setup -q -n %{name}-%{_snap}
 
 %patch0 -p1
 %patch1 -p1
@@ -158,8 +159,7 @@ fi
 /lib/udev/rules.d/51-dlm.rules
 %attr(754,root,root) /etc/rc.d/init.d/%{name}
 %verify(not md5 mtime size) %config(noreplace) /etc/sysconfig/%{name}
-%{_mandir}/man8/dlm_controld.8*
-%{_mandir}/man8/dlm_tool.8*
+%{_mandir}/man8/dlm_*.8*
 %{_mandir}/man5/dlm.conf.5*
 %{systemdunitdir}/%{name}.service
 %{systemdtmpfilesdir}/%{name}.conf
