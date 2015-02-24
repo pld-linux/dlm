@@ -7,7 +7,7 @@ Summary(pl.UTF-8):	Zarządca rozproszonych blokad ogólnego przeznaczenia
 Name:		dlm
 %define     _snap   4283123f0b13eafc46d825050c5142cf44be79c3
 Version:	4.0.3
-Release:	0.1
+Release:	1
 License:	LGPL v2.1+, GPL v2
 Group:		Libraries
 Source0:	https://git.fedorahosted.org/cgit/dlm.git/snapshot/%{name}-%{_snap}.tar.bz2
