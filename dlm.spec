@@ -7,7 +7,7 @@ Summary(pl.UTF-8):	Zarządca rozproszonych blokad ogólnego przeznaczenia
 Name:		dlm
 %define     _snap   4283123f0b13eafc46d825050c5142cf44be79c3
 Version:	4.0.3
-Release:	1
+Release:	2
 License:	LGPL v2.1+, GPL v2
 Group:		Libraries
 Source0:	https://git.fedorahosted.org/cgit/dlm.git/snapshot/%{name}-%{_snap}.tar.bz2
@@ -131,18 +131,18 @@ install %{SOURCE4} $RPM_BUILD_ROOT%{_sysconfdir}/%{name}/%{name}.conf
 rm -rf $RPM_BUILD_ROOT
 
 %post
+/sbin/chkconfig --add %{name}
+%service %{name} restart
 %systemd_post %{name}.service
 
 %preun
-/sbin/chkconfig --add %{name}
-%service %{name} restart
-%systemd_preun %{name}.service
-
-%postun
 if [ "$1" = "0" ]; then
 	%service -q %{name} stop
 	/sbin/chkconfig --del %{name}
 fi
+%systemd_preun %{name}.service
+
+%postun
 %systemd_reload
 
 %post	libs -p /sbin/ldconfig
