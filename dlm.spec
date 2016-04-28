@@ -1,13 +1,13 @@
 #
 # Conditional build:
 %bcond_without	dlm_stonith	# build without fencing helper
-#
+
+%define     _snap   4283123f0b13eafc46d825050c5142cf44be79c3
 Summary:	General-purpose distributed lock manager
 Summary(pl.UTF-8):	Zarządca rozproszonych blokad ogólnego przeznaczenia
 Name:		dlm
-%define     _snap   4283123f0b13eafc46d825050c5142cf44be79c3
 Version:	4.0.3
-Release:	2
+Release:	3
 License:	LGPL v2.1+, GPL v2
 Group:		Libraries
 Source0:	https://git.fedorahosted.org/cgit/dlm.git/snapshot/%{name}-%{_snap}.tar.bz2
@@ -15,9 +15,9 @@ Source0:	https://git.fedorahosted.org/cgit/dlm.git/snapshot/%{name}-%{_snap}.tar
 Source1:	%{name}.init
 Source2:	%{name}.sysconfig
 Source3:	%{name}.tmpfiles
-Source4:	dlm.conf
+Source4:	%{name}.conf
 Patch0:		%{name}-systemd-configfs.patch
-Patch1:     old_udev_dir.patch
+Patch1:		old_udev_dir.patch
 URL:		http://sources.redhat.com/cluster/dlm/
 BuildRequires:	corosync-devel >= 2.0
 %{?with_dlm_stonith:BuildRequires:	libxml2-devel >= 2.0}
@@ -46,7 +46,7 @@ użytkownika.
 %package libs
 Summary:	DLM libraries
 Summary(pl.UTF-8):	Biblioteki DLM
-Group:		Development/Libraries
+Group:		Libraries
 Obsoletes:	cluster-dlm-libs
 
 %description libs
@@ -121,11 +121,11 @@ install -d $RPM_BUILD_ROOT{%{systemdunitdir},/etc/{rc.d/init.d,sysconfig}} \
 	HDRDIR=%{_includedir}
 %endif
 
-install init/%{name}.service $RPM_BUILD_ROOT%{systemdunitdir}
-install %{SOURCE1} $RPM_BUILD_ROOT/etc/rc.d/init.d/%{name}
-install %{SOURCE2} $RPM_BUILD_ROOT/etc/sysconfig/%{name}
-install %{SOURCE3} $RPM_BUILD_ROOT%{systemdtmpfilesdir}/%{name}.conf
-install %{SOURCE4} $RPM_BUILD_ROOT%{_sysconfdir}/%{name}/%{name}.conf
+cp -p init/%{name}.service $RPM_BUILD_ROOT%{systemdunitdir}
+install -p %{SOURCE1} $RPM_BUILD_ROOT/etc/rc.d/init.d/%{name}
+cp -p %{SOURCE2} $RPM_BUILD_ROOT/etc/sysconfig/%{name}
+cp -p %{SOURCE3} $RPM_BUILD_ROOT%{systemdtmpfilesdir}/%{name}.conf
+cp -p %{SOURCE4} $RPM_BUILD_ROOT%{_sysconfdir}/%{name}/%{name}.conf
 
 %clean
 rm -rf $RPM_BUILD_ROOT
