@@ -2,22 +2,20 @@
 # Conditional build:
 %bcond_without	dlm_stonith	# build without fencing helper
 
-%define     _snap   4283123f0b13eafc46d825050c5142cf44be79c3
 Summary:	General-purpose distributed lock manager
 Summary(pl.UTF-8):	Zarządca rozproszonych blokad ogólnego przeznaczenia
 Name:		dlm
-Version:	4.0.3
-Release:	3
+Version:	4.0.6
+Release:	1
 License:	LGPL v2.1+, GPL v2
 Group:		Libraries
-Source0:	https://git.fedorahosted.org/cgit/dlm.git/snapshot/%{name}-%{_snap}.tar.bz2
-# Source0-md5:	575174a0d7b0e1a6e45ec88f447c48cc
+Source0:	https://git.fedorahosted.org/cgit/dlm.git/snapshot/%{name}-%{version}.tar.xz
+# Source0-md5:	809ae130c5a29a7344078da8015754d3
 Source1:	%{name}.init
 Source2:	%{name}.sysconfig
 Source3:	%{name}.tmpfiles
 Source4:	%{name}.conf
-Patch0:		%{name}-systemd-configfs.patch
-Patch1:		old_udev_dir.patch
+Patch0:		old_udev_dir.patch
 URL:		http://sources.redhat.com/cluster/dlm/
 BuildRequires:	corosync-devel >= 2.0
 %{?with_dlm_stonith:BuildRequires:	libxml2-devel >= 2.0}
@@ -25,6 +23,8 @@ BuildRequires:	corosync-devel >= 2.0
 BuildRequires:	pkgconfig
 BuildRequires:	rpmbuild(macros) >= 1.644
 BuildRequires:	systemd-devel
+BuildRequires:	tar >= 1:1.22
+BuildRequires:	xz
 Requires:	%{name}-libs = %{version}-%{release}
 Requires:	rc-scripts
 Requires:	systemd-units >= 208-8
@@ -69,10 +69,8 @@ Header files and development documentation for DLM.
 Pliki nagłówkowe i dokumentacja programisty dla DLM-a.
 
 %prep
-%setup -q -n %{name}-%{_snap}
-
+%setup -q
 %patch0 -p1
-%patch1 -p1
 
 %build
 %{__make} \
