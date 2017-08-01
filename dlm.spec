@@ -10,7 +10,7 @@ Release:	1
 License:	LGPL v2.1+, GPL v2
 Group:		Libraries
 # formerly https://git.fedorahosted.org/cgit/dlm.git/snapshot/%{name}-%{version}.tar.gz
-# in the future probably https://pagure.io/dlm/releases
+# in the future http://releases.pagure.org/dlm/%{name}-%{release}.tar.gz (4.0.7 is repacked)
 Source0:	%{name}-%{version}.tar.gz
 # Source0-md5:	a16563a92198ca57064b270d43452e47
 Source1:	%{name}.init
