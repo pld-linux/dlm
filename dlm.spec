@@ -1,27 +1,21 @@
-#
-# Conditional build:
-%bcond_without	dlm_stonith	# build without fencing helper
-
 Summary:	General-purpose distributed lock manager
 Summary(pl.UTF-8):	Zarządca rozproszonych blokad ogólnego przeznaczenia
 Name:		dlm
-Version:	4.0.7
+Version:	4.0.9
 Release:	1
 License:	LGPL v2.1+, GPL v2
 Group:		Libraries
-# formerly https://git.fedorahosted.org/cgit/dlm.git/snapshot/%{name}-%{version}.tar.gz
-# in the future http://releases.pagure.org/dlm/%{name}-%{release}.tar.gz (4.0.7 is repacked)
-Source0:	%{name}-%{version}.tar.gz
-# Source0-md5:	a16563a92198ca57064b270d43452e47
+Source0:	https://releases.pagure.org/dlm/%{name}-%{version}.tar.gz
+# Source0-md5:	b05551993126679926a432ea5bdf9689
 Source1:	%{name}.init
 Source2:	%{name}.sysconfig
 Source3:	%{name}.tmpfiles
 Source4:	%{name}.conf
 Patch0:		old_udev_dir.patch
-URL:		http://sources.redhat.com/cluster/dlm/
+URL:		http://www.sourceware.org/cluster/dlm/
 BuildRequires:	corosync-devel >= 2.0
-%{?with_dlm_stonith:BuildRequires:	libxml2-devel >= 2.0}
-%{?with_dlm_stonith:BuildRequires:	pacemaker-devel >= 1.1}
+BuildRequires:	libxml2-devel >= 2.0
+BuildRequires:	pacemaker-devel >= 1.1
 BuildRequires:	pkgconfig
 BuildRequires:	rpmbuild(macros) >= 1.644
 BuildRequires:	systemd-devel
@@ -72,6 +66,10 @@ Pliki nagłówkowe i dokumentacja programisty dla DLM-a.
 %setup -q
 %patch0 -p1
 
+%if "%{cc_version}" < "8"
+%{__sed} -i -e 's/-fstack-clash-protection//' {dlm_controld,dlm_tool,fence,libdlm}/Makefile
+%endif
+
 %build
 %{__make} \
 	PREFIX=%{_prefix} \
@@ -81,17 +79,6 @@ Pliki nagłówkowe i dokumentacja programisty dla DLM-a.
 	MANDIR=%{_mandir} \
 	HDRDIR=%{_includedir} \
 	CC="%{__cc} %{rpmcflags} %{rpmcppflags} %{rpmldflags}"
-
-%if %{with dlm_stonith}
-%{__make} -C fence \
-	PREFIX=%{_prefix} \
-	LIBNUM=%{_lib} \
-	BINDIR=%{_sbindir} \
-	LIBDIR=%{_libdir} \
-	MANDIR=%{_mandir} \
-	HDRDIR=%{_includedir} \
-	CC="%{__cc} %{rpmcflags} %{rpmcppflags} %{rpmldflags}"
-%endif
 
 %install
 rm -rf $RPM_BUILD_ROOT
@@ -107,17 +94,6 @@ install -d $RPM_BUILD_ROOT{%{systemdunitdir},/etc/{rc.d/init.d,sysconfig}} \
 	LIBDIR=%{_libdir} \
 	MANDIR=%{_mandir} \
 	HDRDIR=%{_includedir}
-
-%if %{with dlm_stonith}
-%{__make} -C fence install \
-	DESTDIR=$RPM_BUILD_ROOT \
-	PREFIX=%{_prefix} \
-	LIBNUM=%{_lib} \
-	BINDIR=%{_sbindir} \
-	LIBDIR=%{_libdir} \
-	MANDIR=%{_mandir} \
-	HDRDIR=%{_includedir}
-%endif
 
 cp -p init/%{name}.service $RPM_BUILD_ROOT%{systemdunitdir}
 install -p %{SOURCE1} $RPM_BUILD_ROOT/etc/rc.d/init.d/%{name}
@@ -149,7 +125,7 @@ fi
 %files
 %defattr(644,root,root,755)
 %doc README.license
-%{?with_dlm_stonith:%attr(755,root,root) %{_sbindir}/dlm_controld}
+%attr(755,root,root) %{_sbindir}/dlm_controld
 %attr(755,root,root) %{_sbindir}/dlm_stonith
 %attr(755,root,root) %{_sbindir}/dlm_tool
 %dir %{_sysconfdir}/%{name}
@@ -179,7 +155,8 @@ fi
 %attr(755,root,root) %{_libdir}/libdlmcontrol.so
 %{_includedir}/libdlm.h
 %{_includedir}/libdlmcontrol.h
-%{_mandir}/man3/dlm_*.3*
-%{_mandir}/man3/libdlm.3*
 %{_pkgconfigdir}/libdlm.pc
 %{_pkgconfigdir}/libdlm_lt.pc
+%{_pkgconfigdir}/libdlmcontrol.pc
+%{_mandir}/man3/dlm_*.3*
+%{_mandir}/man3/libdlm.3*
