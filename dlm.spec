@@ -1,29 +1,29 @@
 Summary:	General-purpose distributed lock manager
 Summary(pl.UTF-8):	Zarządca rozproszonych blokad ogólnego przeznaczenia
 Name:		dlm
-Version:	4.0.9
+Version:	4.1.1
 Release:	1
 License:	LGPL v2.1+, GPL v2
 Group:		Libraries
 Source0:	https://releases.pagure.org/dlm/%{name}-%{version}.tar.gz
-# Source0-md5:	b05551993126679926a432ea5bdf9689
+# Source0-md5:	3804577098feb0ae039a6c23eaa6c076
 Source1:	%{name}.init
 Source2:	%{name}.sysconfig
 Source3:	%{name}.tmpfiles
 Source4:	%{name}.conf
 Patch0:		old_udev_dir.patch
 URL:		http://www.sourceware.org/cluster/dlm/
-BuildRequires:	corosync-devel >= 2.0
+BuildRequires:	corosync-devel >= 3.1
 BuildRequires:	libxml2-devel >= 2.0
 BuildRequires:	pacemaker-devel >= 1.1
 BuildRequires:	pkgconfig
 BuildRequires:	rpmbuild(macros) >= 1.644
-BuildRequires:	systemd-devel
+BuildRequires:	systemd-devel >= 1:209
 Requires:	%{name}-libs = %{version}-%{release}
 Requires:	rc-scripts
-Requires:	systemd-units >= 208-8
+Requires:	systemd-units >= 1:208-8
 Requires(post,preun):	/sbin/chkconfig
-Obsoletes:	cluster-dlm
+Obsoletes:	cluster-dlm < 4
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
@@ -41,7 +41,7 @@ użytkownika.
 Summary:	DLM libraries
 Summary(pl.UTF-8):	Biblioteki DLM
 Group:		Libraries
-Obsoletes:	cluster-dlm-libs
+Obsoletes:	cluster-dlm-libs < 4
 
 %description libs
 DLM libraries.
@@ -54,7 +54,7 @@ Summary:	Header files and development documentation for DLM
 Summary(pl.UTF-8):	Pliki nagłówkowe i dokumentacja programisty dla DLM-a
 Group:		Development/Libraries
 Requires:	%{name}-libs = %{version}-%{release}
-Obsoletes:	cluster-dlm-devel
+Obsoletes:	cluster-dlm-devel < 4
 
 %description devel
 Header files and development documentation for DLM.
@@ -124,7 +124,7 @@ fi
 
 %files
 %defattr(644,root,root,755)
-%doc README.license
+%doc README.license README.rst
 %attr(755,root,root) %{_sbindir}/dlm_controld
 %attr(755,root,root) %{_sbindir}/dlm_stonith
 %attr(755,root,root) %{_sbindir}/dlm_tool
