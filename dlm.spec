@@ -1,12 +1,12 @@
 Summary:	General-purpose distributed lock manager
 Summary(pl.UTF-8):	Zarządca rozproszonych blokad ogólnego przeznaczenia
 Name:		dlm
-Version:	4.1.1
+Version:	4.3.0
 Release:	1
 License:	LGPL v2.1+, GPL v2
 Group:		Libraries
 Source0:	https://releases.pagure.org/dlm/%{name}-%{version}.tar.gz
-# Source0-md5:	3804577098feb0ae039a6c23eaa6c076
+# Source0-md5:	6d6c65aff64971c7eceea2c00c73ecbd
 Source1:	%{name}.init
 Source2:	%{name}.sysconfig
 Source3:	%{name}.tmpfiles
@@ -15,7 +15,7 @@ Patch0:		old_udev_dir.patch
 URL:		http://www.sourceware.org/cluster/dlm/
 BuildRequires:	corosync-devel >= 3.1
 BuildRequires:	libxml2-devel >= 2.0
-BuildRequires:	pacemaker-devel >= 1.1
+BuildRequires:	pacemaker-devel >= 1.1.7
 BuildRequires:	pkgconfig
 BuildRequires:	rpmbuild(macros) >= 1.644
 BuildRequires:	systemd-devel >= 1:209
