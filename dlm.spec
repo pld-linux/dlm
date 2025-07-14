@@ -64,7 +64,7 @@ Pliki nagłówkowe i dokumentacja programisty dla DLM-a.
 
 %prep
 %setup -q
-%patch0 -p1
+%patch -P0 -p1
 
 %if "%{cc_version}" < "8"
 %{__sed} -i -e 's/-fstack-clash-protection//' {dlm_controld,dlm_tool,fence,libdlm}/Makefile
